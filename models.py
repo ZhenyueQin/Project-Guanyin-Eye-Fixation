@@ -9,6 +9,7 @@ from dcn_resnet import dcn_resnet
 from gaussian_prior import LearningPrior
 from attentive_convlstm import AttentiveConvLSTM
 from config import *
+from keras.layers import concatenate
 
 
 def repeat(x):
@@ -108,13 +109,13 @@ def sam_vgg(x):
 
     # Learned Prior (1)
     priors1 = LearningPrior(nb_gaussian=nb_gaussian, init=gaussian_priors_init)(x[1])
-    concateneted = merge([att_convlstm, priors1], mode='concat', concat_axis=1)
+    concateneted = concatenate([att_convlstm, priors1], axis=1)
     learned_priors1 = AtrousConvolution2D(512, 5, 5, border_mode='same', activation='relu',
                                           atrous_rate=(4, 4))(concateneted)
 
     # Learned Prior (2)
     priors2 = LearningPrior(nb_gaussian=nb_gaussian, init=gaussian_priors_init)(x[1])
-    concateneted = merge([learned_priors1, priors2], mode='concat', concat_axis=1)
+    concateneted = concatenate([learned_priors1, priors2], axis=1)
     learned_priors2 = AtrousConvolution2D(512, 5, 5, border_mode='same', activation='relu',
                                           atrous_rate=(4, 4))(concateneted)
 
@@ -137,13 +138,13 @@ def sam_resnet(x):
 
     # Learned Prior (1)
     priors1 = LearningPrior(nb_gaussian=nb_gaussian, init=gaussian_priors_init)(x[1])
-    concateneted = merge([att_convlstm, priors1], mode='concat', concat_axis=1)
+    concateneted = concatenate([att_convlstm, priors1], mode='concat', axis=1)
     learned_priors1 = AtrousConvolution2D(512, 5, 5, border_mode='same', activation='relu',
                                           atrous_rate=(4, 4))(concateneted)
 
     # Learned Prior (2)
     priors2 = LearningPrior(nb_gaussian=nb_gaussian, init=gaussian_priors_init)(x[1])
-    concateneted = merge([learned_priors1, priors2], mode='concat', concat_axis=1)
+    concateneted = concatenate([learned_priors1, priors2], mode='concat', axis=1)
     learned_priors2 = AtrousConvolution2D(512, 5, 5, border_mode='same', activation='relu',
                                           atrous_rate=(4, 4))(concateneted)
 

@@ -4,7 +4,7 @@ This code is part of the Keras ResNet-50 model
 from __future__ import print_function
 from __future__ import absolute_import
 
-from keras.layers import merge, Input, Activation
+from keras.layers import merge, Input, Activation, add
 from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.layers.convolutional import AtrousConvolution2D
 from keras.layers import BatchNormalization
@@ -34,7 +34,7 @@ def identity_block(input_tensor, kernel_size, filters, stage, block):
     x = Convolution2D(nb_filter3, 1, 1, name=conv_name_base + '2c')(x)
     x = BatchNormalization(axis=bn_axis, name=bn_name_base + '2c')(x)
 
-    x = merge([x, input_tensor], mode='sum')
+    x = add([x, input_tensor])
     x = Activation('relu')(x)
     return x
 
@@ -63,7 +63,7 @@ def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2))
                              name=conv_name_base + '1')(input_tensor)
     shortcut = BatchNormalization(axis=bn_axis, name=bn_name_base + '1')(shortcut)
 
-    x = merge([x, shortcut], mode='sum')
+    x = add([x, shortcut])
     x = Activation('relu')(x)
     return x
 
@@ -90,7 +90,7 @@ def conv_block_atrous(input_tensor, kernel_size, filters, stage, block, atrous_r
     shortcut = Convolution2D(nb_filter3, 1, 1, name=conv_name_base + '1')(input_tensor)
     shortcut = BatchNormalization(axis=bn_axis, name=bn_name_base + '1')(shortcut)
 
-    x = merge([x, shortcut], mode='sum')
+    x = add([x, shortcut])
     x = Activation('relu')(x)
     return x
 
@@ -114,7 +114,7 @@ def identity_block_atrous(input_tensor, kernel_size, filters, stage, block, atro
     x = Convolution2D(nb_filter3, 1, 1, name=conv_name_base + '2c')(x)
     x = BatchNormalization(axis=bn_axis, name=bn_name_base + '2c')(x)
 
-    x = merge([x, input_tensor], mode='sum')
+    x = add([x, input_tensor])
     x = Activation('relu')(x)
     return x
 

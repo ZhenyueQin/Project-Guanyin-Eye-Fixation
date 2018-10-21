@@ -2,7 +2,7 @@ from __future__ import division
 import keras.backend as K
 import theano.tensor as T
 from keras.layers import Layer, InputSpec
-from keras import initializations, regularizers, constraints
+from keras import initializers, regularizers, constraints
 import theano
 import numpy as np
 floatX = theano.config.floatX
@@ -13,7 +13,7 @@ class LearningPrior(Layer):
                  W_regularizer=None, activity_regularizer=None,
                  W_constraint=None, **kwargs):
         self.nb_gaussian = nb_gaussian
-        self.init = initializations.get(init, dim_ordering='th')
+        self.init = initializers.get(init, dim_ordering='th')
 
         self.W_regularizer = regularizers.get(W_regularizer)
         self.activity_regularizer = regularizers.get(activity_regularizer)

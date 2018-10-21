@@ -2,7 +2,7 @@ from __future__ import division
 import keras.backend as K
 from keras.layers import Layer, InputSpec
 from keras.layers.convolutional import Convolution2D
-from keras import initializations, activations
+from keras import initializers, activations
 
 
 class AttentiveConvLSTM(Layer):
@@ -17,9 +17,9 @@ class AttentiveConvLSTM(Layer):
         self.nb_filters_att = nb_filters_att
         self.nb_rows = nb_rows
         self.nb_cols = nb_cols
-        self.init = initializations.get(init)
-        self.inner_init = initializations.get(inner_init)
-        self.attentive_init = initializations.get(attentive_init)
+        self.init = initializers.get(init)
+        self.inner_init = initializers.get(inner_init)
+        self.attentive_init = initializers.get(attentive_init)
         self.activation = activations.get(activation)
         self.inner_activation = activations.get(inner_activation)
         self.initial_weights = weights
@@ -39,7 +39,8 @@ class AttentiveConvLSTM(Layer):
 
     def get_initial_states(self, x):
         initial_state = K.sum(x, axis=1)
-        initial_state = K.conv2d(initial_state, K.zeros((self.nb_filters_out, self.nb_filters_in, 1, 1)), border_mode='same')
+        print('what is this: ', (self.nb_filters_out, self.nb_filters_in, 1, 1))
+        initial_state = K.conv2d(initial_state, K.zeros((self.nb_filters_out, self.nb_filters_in, 1, 1)), padding='same')
         initial_states = [initial_state for _ in range(len(self.states))]
 
         return initial_states
